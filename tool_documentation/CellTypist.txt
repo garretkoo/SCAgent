@@ -1,0 +1,184 @@
+CellTypist: Usage Guide (Classification)
+
+1. Importing and Setting Up
+---------------------------
+To use CellTypist, you need to import the required package and set up your environment:
+
+import celltypist
+from celltypist import models   
+
+2. Downloading Models
+---------------------
+### List of all available models that can be used
+Choose one of the appropriate model to use:
+- Immune_All_Low.pkl: immune sub-populations combined from 20 tissues of 18 studies
+- Immune_All_High.pkl: immune populations combined from 20 tissues of 18 studies
+- Adult_COVID19_PBMC.pkl: peripheral blood mononuclear cell types from COVID-19 patients and healthy controls
+- Adult_CynomolgusMacaque_Hippocampus.pkl: cell types from the hippocampus of adult cynomolgus monkeys (Macaca fascicularis)
+- Adult_Human_MTG.pkl: cell types and subtypes (10x-based) from the adult human middle temporal gyrus
+- Adult_Human_PancreaticIslet.pkl: cell types from pancreatic islets of healthy adult humans
+- Adult_Human_PrefrontalCortex.pkl: cell types and subtypes from the adult human dorsolateral prefrontal cortex
+- Adult_Human_Skin.pkl: cell types from human healthy adult skin
+- Adult_Human_Vascular.pkl: vascular populations combined from multiple adult human organs
+- Adult_Mouse_Gut.pkl: cell types in the adult mouse gut combined from eight datasets
+- Adult_Mouse_OlfactoryBulb.pkl: cell types from the olfactory bulb of adult mice
+- Adult_Pig_Hippocampus.pkl: cell types from the adult pig hippocampus
+- Adult_RhesusMacaque_Hippocampus.pkl: cell types from the hippocampus of adult rhesus monkeys (Macaca mulatta)
+- Autopsy_COVID19_Lung.pkl: cell types from the lungs of 16 SARS-CoV-2 infected COVID-19 autopsy adult donors
+- COVID19_HumanChallenge_Blood.pkl: detailed blood cell states from 16 individuals after being challenged with SARS-CoV-2
+- COVID19_Immune_Landscape.pkl: immune subtypes from lung and blood of COVID-19 patients and healthy controls
+- Cells_Adult_Breast.pkl: Cell types from the adult human breast
+- Cells_Fetal_Lung.pkl: Cell types from human embryonic and fetal lungs
+- Cells_Human_Tonsil.pkl: Tonsillar cell types from humans (3-65 years)
+- Cells_Intestinal_Tract.pkl: Intestinal cells from fetal, pediatric (healthy and Crohn's disease), and adult human gut
+- Cells_Lung_Airway.pkl: Cell populations from scRNA-seq of five locations of the human lungs and airways
+- Developing_Human_Brain.pkl: Cell types from the first-trimester developing human brain
+- Developing_Human_Gonads.pkl: Cell types of human gonadal and adjacent extragonadal tissue from the first and second trimesters of gestation
+- Developing_Human_Hippocampus.pkl: Cell types from the developing human hippocampus
+- Developing_Human_Organs.pkl: Cell types of five endoderm-derived organs in developing humans from 7–21 post-conception weeks
+- Developing_Human_Thymus.pkl: Cell populations in embryonic, fetal, pediatric, and adult stages of the human thymus
+- Developing_Mouse_Brain.pkl: Cell types from the embryonic mouse brain between gastrulation and birth
+- Developing_Mouse_Hippocampus.pkl: Cell types from the mouse hippocampus at postnatal day 7
+- Fetal_Human_AdrenalGlands.pkl: Cell types of human fetal adrenal glands from 8 to 14 post-conceptional weeks
+- Fetal_Human_Pancreas.pkl: Pancreatic cell types from human embryos at 9-19 weeks post conception
+- Fetal_Human_Pituitary.pkl: Cell types of human fetal pituitaries from 7 to 25 weeks postfertilization
+- Fetal_Human_Retina.pkl: Cell types from human fetal neural retina and retinal pigment epithelium
+- Fetal_Human_Skin.pkl: Cell types from developing human fetal skin
+- Healthy_Adult_Heart.pkl: Cell types from eight anatomical regions of the healthy adult human heart
+- Healthy_COVID19_PBMC.pkl: Peripheral blood mononuclear cell types from healthy and COVID-19 individuals
+- Healthy_Human_Liver.pkl: Cell types from scRNA-seq and snRNA-seq of the adult human liver
+- Healthy_Mouse_Liver.pkl: Cell types from scRNA-seq and snRNA-seq of the healthy murine liver
+- Human_AdultAged_Hippocampus.pkl: Cell types from the hippocampus of adult and aged humans
+- Human_Colorectal_Cancer.pkl: Cell types of colon tissues from patients with colorectal cancer
+- Human_Developmental_Retina.pkl: Cell types from human fetal retina
+- Human_Embryonic_YolkSac.pkl: Cell types of the human yolk sac from 4-8 post-conception weeks
+- Human_Endometrium_Atlas.pkl: Endometrial cell types integrated from seven datasets across the menstrual cycle
+- Human_IPF_Lung.pkl: Cell types from idiopathic pulmonary fibrosis, chronic obstructive pulmonary disease, and healthy lungs of adult humans
+- Human_Longitudinal_Hippocampus.pkl: Cell types from the adult human anterior and posterior hippocampus
+- Human_Lung_Atlas.pkl: Integrated Human Lung Cell Atlas (HLCA) combining multiple datasets of the healthy respiratory system
+- Human_PF_Lung.pkl: Cell types from different forms of pulmonary fibrosis lungs of adult humans
+- Human_Placenta_Decidua.pkl: Cell types from first-trimester human placentas with matched maternal blood and decidua
+- Lethal_COVID19_Lung.pkl: Cell types from the lungs of individuals who died of COVID-19 and control individuals
+- Mouse_Dentate_Gyrus.pkl: Cell types from the dentate gyrus in perinatal, juvenile, and adult mice
+- Mouse_Isocortex_Hippocampus.pkl: Cell types from the adult mouse isocortex (neocortex) and hippocampal formation
+- Mouse_Postnatal_DentateGyrus.pkl: Cell types from the mouse dentate gyrus in postnatal days 12-35
+- Mouse_Whole_Brain.pkl: Cell types from the whole adult mouse brain
+- Nuclei_Lung_Airway.pkl: Cell populations from snRNA-seq of five locations of the human lungs and airways
+- Pan_Fetal_Human.pkl: Stromal and immune populations from the human fetus
+
+3. Exploring Models
+-------------------
+### Example of Load a Specific Model
+To load a specific model, you can use the following code. Replace 'your_correct_model.pkl' with the model of your choice:
+
+model = models.Model.load(model='your_correct_model.pkl')
+
+### Inspect Model Metadata
+You can inspect the loaded model's metadata using:
+
+model
+model.cell_types     # Cell types in the model
+model.features       # Gene features in the model
+
+4. Running Cell Typing
+----------------------
+### Input Format
+CellTypist accepts the input data as a count table (cell-by-gene or gene-by-cell) in the format of .txt, .csv, .tsv, .tab, .mtx, or .mtx.gz. A raw count matrix (reads or UMIs) is required. Non-expressed genes (if you are sure of their expression absence in your data) are suggested to be included in the input table, as they point to the negative transcriptomic signatures when compared with the model used.
+
+### Get Demo Test Data
+You can get a demo test data file with cells as rows and gene symbols as columns:
+
+input_file = celltypist.samples.get_sample_csv()
+
+### Predictions Using a Model
+To run predictions using a model, you can pass the input file and specify the model name:
+
+predictions = celltypist.annotate(input_file, model='your_correct_model.pkl')
+
+Or, if you have already loaded a model:
+
+predictions = celltypist.annotate(input_file, model=model)
+
+### Gene-by-Cell Format
+If the input data is in gene-by-cell format (genes as rows and cells as columns), specify the argument transpose_input=True:
+
+predictions = celltypist.annotate(input_file, model='your_correct_model.pkl', transpose_input=True)
+
+### Input Format: .mtx
+If the input is provided in the .mtx format, you will need to specify the gene_file and cell_file arguments as the files containing the names of genes and cells, respectively:
+
+predictions = celltypist.annotate(
+    input_file,
+    model='your_correct_model.pkl',
+    transpose_input=True,
+    gene_file='/path/to/gene/file.txt',
+    cell_file='/path/to/cell/file.txt'
+)
+
+### Default Model
+If the model argument is not specified, CellTypist will use the default model (Immune_All_Low.pkl).
+
+The annotate function will return an instance of the AnnotationResult class as defined in CellTypist.
+
+5. Exploring Prediction Results
+-------------------------------
+- predictions.predicted_labels: Shows predicted cell type for each cell.
+- predictions.decision_matrix: Decision scores for each cell type.
+- predictions.probability_matrix: Probabilities (sigmoid-transformed from decision scores).
+
+### Prediction mode options:
+- Default: (mode = 'best match') — assigns the cell type with the highest probability.
+- Alternative: (mode = 'prob match') — uses a cutoff (p_thres, default 0.5); cells can be labeled with (none, 1, or multiple) types (concatenated with |).
+
+Example:
+predictions = celltypist.annotate(input_file, model='your_correct_model.pkl', mode='prob match', p_thres=0.5)
+
+6. Exporting Results
+--------------------
+- Save results to CSV or Excel:
+  predictions.to_table(folder='/path/to/folder', prefix='', xlsx=True)
+
+7. Convert to AnnData
+---------------------
+- Convert predictions to an AnnData object with metadata:
+  adata = predictions.to_adata(insert_labels=True, insert_conf=True)
+
+### Optional insertions:
+- insert_decision=True → add decision matrix.
+- insert_prob=True → add probability matrix (recommended).
+
+All metadata columns will reflect respective cell types; use prefix='' to customize column names.
+
+8. Visualize Results
+--------------------
+- Visualize the predicted cell types overlaid onto the UMAP:
+  predictions.to_plots(folder='/path/to/a/folder', prefix='')
+
+- Add decision score and probability overlays:
+  predictions.to_plots(folder='/path/to/a/folder', prefix='', plot_probability=True)
+
+9. Using AnnData Input
+----------------------
+- If using .h5ad:
+  predictions = celltypist.annotate('/path/to/input.h5ad', model='your_correct_model.pkl')
+
+- Or pass a loaded AnnData object:
+  predictions = celltypist.annotate(a_loaded_adata, model='your_correct_model.pkl')
+
+### Note:
+- Expression matrix must be log1p normalized to 10,000 counts per cell.
+- Full gene list is recommended for better model matching.
+- Visualizations will reuse existing UMAP or generate a new one using Scanpy.
+
+10. Using Majority Voting
+-------------------------
+- Improves consistency across similar cells by clustering and re-assigning dominant type per cluster:
+  predictions = celltypist.annotate(input_file, model='your_correct_model.pkl', majority_voting=True)
+
+### Optional clustering input via:
+- File
+- Metadata column key
+- 1D list/array
+- Default: automatic Leiden clustering
+
+- min_prop (default 0) sets minimum proportion threshold to assign a label; otherwise, cluster is labeled "Heterogeneous".

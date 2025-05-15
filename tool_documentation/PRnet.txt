@@ -1,0 +1,43 @@
+PRnet/: contains the code for the model, the data, and documents.
+data: contains the utils for data processing.
+dataset: contains datasets.
+figure: contains notebooks for generate figures in our paper.
+img: contains the graphic abstract of PRnet.
+models: contains models of PRnet.
+trainer: contains trainer of PRnet.
+preprocessing: contains notebooks for processing the data.
+train and test: including test_lincs.py, train_lincs.py, train_sciplex.py and test_sciplex.py.
+
+**Important**: 
+1: It is compulsory to change the virtual environment with name of "PRnet" before running anything below.
+2: It is compulsory to change the current working directory to PRnet folder (PRnet/) before running anything below. 
+
+Step 1: Inference with custom datatset
+Please see custom_data_preprocessing.ipynb to prepare your dataset. 'custom_data_preprocessing' is a demo which preprocesses the data from CCLE.
+
+Step 2: Train and test with provided datatset
+To train the L1000 dataset:
+python train_lincs.py --split_key drug_split_4    
+
+To test the L1000 dataset:
+python test_lincs.py --split_key drug_split_4     
+
+To train the Sci-plex dataset:
+python train_sciplex.py --split_key drug_split_0   
+
+To test the Sci-plex dataset:
+python test_sciplex.py --split_key drug_split_0    
+
+Step 3: Analysis the results
+To analysis the L1000 dataset:
+python analysis_lincs.py --split_key drug_split_4    
+
+To analysis the Sci-plex dataset:
+python analysis_sciplex.py --split_key drug_split_0     
+
+
+Figures
+Name	Description
+drug_candidates_recomandation.ipynb	Recomand drug for diseases.
+latent_tsne_lung_cancer	Learnable latent space of lung cancer data
+SCLC_plot_dsea	Enrichment score of candidates against small cell lung cancer
